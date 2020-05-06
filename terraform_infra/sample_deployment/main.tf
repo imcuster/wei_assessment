@@ -14,12 +14,6 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "vpc_id" {}
-
-data "aws_vpc" "selected" {
-  default = true
-}
-
 # Set up multiple providers with aliases so we can differentiate our modules.
 provider "aws" {
   alias                   = "east"
@@ -38,7 +32,6 @@ provider "aws" {
 module "ec2_east" {
   source = "../modules/ec2"
   region = "us-east-1"
-  vpc_id = data.aws_vpc.selected.id
   providers = {
     aws = aws.east
   }
@@ -47,7 +40,6 @@ module "ec2_east" {
 module "ec2_west" {
   source = "../modules/ec2"
   region = "us-west-2"
-  vpd_id = data.aws_vpc.selected.id
   providers = {
     aws = aws.west
   }
