@@ -2,7 +2,7 @@
 
 import boto3
 from botocore.exceptions import ClientError
-from openpxyl import Workbook
+# from openpxyl import Workbook
 import argparse
 import datetime
 
@@ -14,8 +14,8 @@ args = parser.parse_args()
 
 session = boto3.session.Session(profile_name=args.profile)
 regions = session.get_available_regions('ec2')
-workbook = Workbook()
-sheet = workbook.active
+# workbook = Workbook()
+# sheet = workbook.active
 #region_name = args.region
 
 def list_instances():
@@ -36,30 +36,36 @@ def list_instances():
             print("Number of attached disks:", len(volume_info))
             # Get information about attached volumes
             for volume in volume_info:
-                # # Attempting to define a usable CloudWatch metric.
-                # disk_metrics = cw.get_metric_data(
-                #     MetricDataQueries=[
-                #         {
-                #             'Id': 'disk_utilization',
-                #             "MetricStat" : {
-                #                 "Metric": {
-                #                     "Namespace": "AWS/EC2",
-                #                     "MetricName": "DiskWriteBytes",
-                #                     "Dimensions": [
-                #                         {
-                #                             'Name': 'InstanceId',
-                #                             'Value': instance
-                #                         },
-                #                     ]
-                #                 },
-                #                 'Period': 86400,
-                #                 'Stat': 'DiskWriteBytes',
-                #                 'Unit': 'Bytes'
-                #             },
-                #         ],
-                #     StartTime=datetime(2020, 5, 1),
-                #     EndTime=datetime(2020, 5, 6)
-                # )
+                disk_metrics = client.get_metric_data(
+                    MetricDataQueries=[
+                        {
+                            'Id': 'disk_utilization',
+                            'MetricStat': {
+                                'Metric': {
+                                    'Namespace': 'AWS/EC2',
+                                    'MetricName': 'DiskWriteBytes',
+                                    'Dimensions': [
+                                        {
+                                            'Name': 'InstanceId',
+                                            'Value': instance
+                                        },
+                                    ]
+                                },
+                                'Period': 86400,
+                                'Stat': 'DiskWriteBytes',
+                                'Unit': 'Bytes'
+                            },
+                            'ReturnData': True,
+                            'Period': 86400,
+                            'Stat': 'DiskWriteBytes'
+                        },
+                    ],
+                    StartTime=datetime(2020, 5, 1),
+                    EndTime=datetime(2020, 5, 6),
+                    ScanBy='TimestampDescending',
+                    MaxDatapoints=123
+                )
+                print(disk_metrics)
                 volume_id = volume['Ebs']['VolumeId']
                 #print(volume['Ebs']['VolumeId'])
                 print("Volume ID:", volume_id)
