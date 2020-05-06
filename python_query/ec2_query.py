@@ -2,6 +2,7 @@
 
 import boto3
 import argparse
+from openpyxl import Workbook
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--profile', help='Select the AWS profile you will run this script with.', default='default')
