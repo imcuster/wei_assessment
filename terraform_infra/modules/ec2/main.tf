@@ -14,6 +14,12 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+variable "vpc_id" {}
+
+data "aws_vpc" "selected" {
+  id = var.vpc_id
+}
+
 # Create the EC2 instance
 resource "aws_instance" "ec2_deployment" {
   ami                         = data.aws_ami.ubuntu.id
