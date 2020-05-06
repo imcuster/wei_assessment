@@ -17,7 +17,8 @@ variable "region" {
 variable "vpc_id" {}
 
 data "aws_vpc" "selected" {
-  id = var.vpc_id
+  id      = var.vpc_id
+  default = true
 }
 
 # Set up multiple providers with aliases so we can differentiate our modules.
