@@ -38,6 +38,7 @@ provider "aws" {
 module "ec2_east" {
   source = "../modules/ec2"
   region = "us-east-1"
+  vpc_id = data.aws_vpc.selected.id
   providers = {
     aws = aws.east
   }
@@ -46,6 +47,7 @@ module "ec2_east" {
 module "ec2_west" {
   source = "../modules/ec2"
   region = "us-west-2"
+  vpd_id = data.aws_vpc.selected.id
   providers = {
     aws = aws.west
   }
