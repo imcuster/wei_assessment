@@ -14,6 +14,12 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "vpc_id" {}
+
+data "aws_vpc" "selected" {
+  id = var.vpc_id
+}
+
 # Set up multiple providers with aliases so we can differentiate our modules.
 provider "aws" {
   alias                   = "east"
