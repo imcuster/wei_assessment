@@ -40,5 +40,5 @@ def list_instances():
                 print("Volume size:", volume_size)
 
 for region in regions:
-    print("Region": region)
+    print("Region:", region)
     list_instances()
